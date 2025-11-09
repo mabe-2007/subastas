@@ -1,0 +1,149 @@
+
+/* Fondo */
+body {   
+    background: #84b6f4;
+    background-size: cover;      /* La imagen cubre toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat;/* Evita que se repita */
+    min-height: 100vh;           /* Que cubra toda la altura */
+  }
+
+
+/* Solo en pantallas grandes aplica el efecto fixed */
+@media (min-width: 768px) {
+  body {
+    background-attachment: fixed;
+  }
+}
+#correoinicio,
+#claveinicio {
+  color: #000000;                         /* Texto negro para que se lea en blanco */
+  background: #ffffff;                    /* Fondo blanco sólido */
+  border: 1px solid #ccc;                 /* Borde gris claro */
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Placeholder (texto gris que aparece antes de escribir) */
+#correoinicio::placeholder,
+#claveinicio::placeholder {
+  color: #777777; /* Gris medio para contraste */
+  opacity: 1;
+}
+
+
+
+/* CLAVE */
+.claverecuperar {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(255,255,255,0.8);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  /* separación del botón anterior */
+  display: block;       /* hace que ocupe toda la línea */
+  margin-top: 15px;     /* espacio hacia arriba */
+}
+/* Efecto al pasar el mouse */
+.claverecuperar:hover {
+  background: rgba(255,255,255,0.2);          /* Fondo semi-transparente */
+  color: blue;                             /* Texto negro */
+  border-color: #ffffff;                      /* Borde más visible */
+}
+
+
+
+
+/* Botones */
+.btn {
+  display: inline-block;
+  padding: 4px 10px;
+  margin-bottom: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: #333;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.75);
+  vertical-align: middle;
+  background-color: #f5f5f5;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 2px rgba(0,0,0,0.05);
+  cursor: pointer;
+}
+
+
+.btn-large {
+  padding: 9px 14px;
+  font-size: 15px;
+  border-radius: 5px;
+}
+
+.btn-block {
+  width: 100%;
+  display: block;
+}
+
+.btn-primary,
+.btn-primary:hover {
+  padding: 5px;
+  background-color: #4a77d4;
+  background-image: linear-gradient(to bottom, #6eb6de, #4a77d4); /* degradado */
+  border: 1px solid #3762bc;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.25);/* sombra de texto */
+}
+
+
+
+.btn-secondary ,
+.btn-secondary:hover {
+  padding: 5px;
+  margin-top: 15px; /* espacio hacia arriba del segundo botón */
+  background-color: #4a77d4;
+  background-image: linear-gradient(to bottom, #6eb6de, #4a77d4);
+  border:1px solid #3762bc;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 2px rgba(0,0,0,0.5);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.25);/* sombra de texto */
+}
+
+
+
+/* Login */
+.login {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -150px 0 0 -150px;
+  width: 300px;/* Ancho del formulario */
+  height: 300px;/* Alto del formulario */
+}
+
+
+
+/* Inputs */
+input {
+  width: 100%; /* Ancho completo */
+  margin-bottom: 10px;/* Espacio entre inputs */
+  background: rgba(0,0,0,0.3);/* Fondo semitransparente */
+  border: 1px solid rgba(0,0,0,0.3);
+  outline: none;
+  padding: 10px;
+  font-size: 13px;
+  color: #fff;
+  
+}
+
+
