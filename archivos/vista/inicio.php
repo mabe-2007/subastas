@@ -151,44 +151,44 @@ $idrol = $_SESSION['idrol'];
                         <input type="hidden" id="editIdusuario" name="idusuario">
 
                         <div class="mb-3">
-                            <label>Nombre</label>
+                            <label for="editNombre">Nombre</label>
                             <input type="text" class="form-control" id="editNombre" name="nombre" required>
                         </div>
 
                         <div class="mb-3">
-                            <label>Apellidos</label>
+                            <label for="editApellidos">Apellidos</label>
                             <input type="text" class="form-control" id="editApellidos" name="apellidos" required>
                         </div>
 
                         <div class="mb-3">
-                            <label>Dirección</label>
+                            <label for="editDireccion">Dirección</label>
                             <input type="text" class="form-control" id="editDireccion" name="direccion">
                         </div>
 
                         <div class="mb-3">
-                            <label>Identificación</label>
+                            <label for="editIdentificacion">Identificación</label>
                             <input type="text" class="form-control" id="editIdentificacion" name="identificacion" readonly />
                         </div>
 
                         <div class="mb-3">
-                            <label>Teléfono</label>
+                            <label for="editTelefono">Teléfono</label>
                             <input type="text" class="form-control" id="editTelefono" name="telefono">
                         </div>
 
                         <div class="mb-3">
-                            <label>Correo</label>
+                            <label for="editCorreo">Correo</label>
                             <input type="email" class="form-control" id="editCorreo" name="correo" required>
                         </div>
 
                         <div class="mb-3">
-                            <label>Rol</label>
+                            <label for="editRol">Rol</label>
                             <select class="form-control" id="editRol" name="idrol" required>
                                 <!-- Se llenará con AJAX -->
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <label>Departamento</label>
+                            <label for="editDepartamento">Departamento</label>
                             <select class="form-control" id="editDepartamento" name="iddepartamento" required>
                                 <!-- Se llenará con AJAX -->
                             </select>
