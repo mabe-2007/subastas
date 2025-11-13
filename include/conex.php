@@ -1,28 +1,34 @@
 <?php
-// conex.php - Versión segura con variables de entorno
+// Incluir configurador de variables de entorno
+require_once 'config_env.php';
 
 function Conectarse() {
-    // ✅ SOLUCIÓN: Usar variables de entorno en lugar de credenciales hardcodeadas
+    // ✅ USAR VARIABLES DE ENTORNO
     $servername = $_ENV['DB_HOST'] ?? 'localhost';
     $db = $_ENV['DB_NAME'] ?? 'subastas';
-    $username = $_ENV['DB_USER'] ?? 'sena123';
-    $password = $_ENV['DB_PASS'] ?? 'sena123';
+    $username = $_ENV['DB_USER'] ?? '';
+    $password = $_ENV['DB_PASS'] ?? '';
     
-    // ✅ CONEXIÓN CORREGIDA usando MySQLi
+    // Validar que tengamos credenciales
+    if (empty($username) || empty($password)) {
+        error_log("Error: Credenciales de BD no configuradas en .env");
+        die("Error de configuración. Contacte al administrador.");
+    }
+    
+    // ✅ CONEXIÓN SEGURA
     $conectar = mysqli_connect($servername, $username, $password, $db);
     
     if (!$conectar) {
-        // ✅ MANEJO SEGURO DE ERRORES
         error_log("Error de conexión a la base de datos: " . mysqli_connect_error());
         die("Error de conexión a la base de datos. Por favor, intente más tarde.");
     } else {
-        // ✅ CONFIGURACIÓN DE SEGURIDAD ADICIONAL
-        mysqli_set_charset($conectar, "utf8mb4");
+        $charset = $_ENV['DB_CHARSET'] ?? 'utf8mb4';
+        mysqli_set_charset($conectar, $charset);
         return $conectar;
     }
 }
 
-// Resto del código permanece igual...
+// Resto de tus funciones...
 function ejecutarConsulta($sql, $tipos = "", $parametros = []) {
     $conn = Conectarse();
     $stmt = mysqli_prepare($conn, $sql);
