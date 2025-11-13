@@ -1,18 +1,18 @@
 <?php
-// conex.php - Versión segura y corregida
+// conex.php - Versión segura con variables de entorno
 
 function Conectarse() {
-    // ✅ CONFIGURACIÓN SEGURA - Considerar usar variables de entorno
-    $servername = "localhost";
-    $db = "subastas";
-    $username = "sena123";
-    $password = "sena123";
+    // ✅ SOLUCIÓN: Usar variables de entorno en lugar de credenciales hardcodeadas
+    $servername = $_ENV['DB_HOST'] ?? 'localhost';
+    $db = $_ENV['DB_NAME'] ?? 'subastas';
+    $username = $_ENV['DB_USER'] ?? 'sena123';
+    $password = $_ENV['DB_PASS'] ?? 'sena123';
     
-    // ✅ CONEXIÓN CORREGIDA usando MySQLi (mejor que mysql_* obsoleto)
+    // ✅ CONEXIÓN CORREGIDA usando MySQLi
     $conectar = mysqli_connect($servername, $username, $password, $db);
     
     if (!$conectar) {
-        // ✅ MANEJO SEGURO DE ERRORES (sin exponer detalles sensibles)
+        // ✅ MANEJO SEGURO DE ERRORES
         error_log("Error de conexión a la base de datos: " . mysqli_connect_error());
         die("Error de conexión a la base de datos. Por favor, intente más tarde.");
     } else {
@@ -22,7 +22,7 @@ function Conectarse() {
     }
 }
 
-// ✅ FUNCIÓN ADICIONAL PARA CONSULTAS PREPARADAS (más segura)
+// Resto del código permanece igual...
 function ejecutarConsulta($sql, $tipos = "", $parametros = []) {
     $conn = Conectarse();
     $stmt = mysqli_prepare($conn, $sql);
@@ -42,7 +42,6 @@ function ejecutarConsulta($sql, $tipos = "", $parametros = []) {
     }
 }
 
-// ✅ FUNCIÓN PARA CERRAR CONEXIÓN
 function cerrarConexion($conexion) {
     if ($conexion) {
         mysqli_close($conexion);
