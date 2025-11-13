@@ -14,7 +14,7 @@ if (!$password) {
     // Intenta cargar desde archivo de configuración externo
     $config_file = __DIR__ . '/../../config/email_config.php';
     if (file_exists($config_file)) {
-        $config = include $config_file;
+        $config = include_once $config_file;
         $password = $config['email_password'] ?? null;
     }
 }
