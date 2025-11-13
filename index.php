@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css?family=Exo:400,500,600,700,800&display=swap" rel="stylesheet">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
   <!-- Estilos personalizados -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -44,7 +44,7 @@
         });
 
          // Verificar si el usuario ya se registró
-        $.get('verificarRegistro.php', function (data) {
+        $.get('include/verificarRegistro.php', function (data) {
             if (data.registrado) {
                 // Oculta el botón de registrar
                 $('#btnregistrar').hide();
