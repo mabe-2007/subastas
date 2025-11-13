@@ -2,7 +2,7 @@
 // conex.php - Versión definitiva SIN getEnvVar
 
 // Incluir configurador de variables de entorno
-require_once 'config_env.php';
+use 'config_env.php';
 
 function Conectarse() {
     // ✅ USAR FUNCIÓN DE config_env.php
