@@ -17,7 +17,7 @@ if (!$password) {
     // Intenta cargar desde archivo de configuración externo
     $config_file = __DIR__ . '/../../config/email_config.php';
     if (file_exists($config_file)) {
-        include $config_file;
+        include_once $config_file;
     } else {
         // Fallback - pero esto debería manejarse mejor
         die('Error: Configuración de email no encontrada');
