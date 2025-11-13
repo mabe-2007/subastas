@@ -1,6 +1,7 @@
 <?php
 // include/config_env.php - Cargar variables de entorno
-function loadEnvironmentVariable($filePath = "../env") {
+
+function loadEnvironmentVariables($filePath = "../env") {
     if (!file_exists($filePath)) {
         error_log("Archivo env no encontrado: " . $filePath);
         return false;
@@ -27,6 +28,17 @@ function loadEnvironmentVariable($filePath = "../env") {
         }
     }
     return true;
+}
+
+// ✅ USAR CONDICIONAL PARA EVITAR REDECLARACIÓN
+if (!function_exists('getEnvVar')) {
+    function getEnvVar($key, $default = '') {
+        if (isset($_ENV[$key])) {
+            return $_ENV[$key];
+        }
+        $value = getenv($key);
+        return $value !== false ? $value : $default;
+    }
 }
 
 // Cargar variables al incluir este archivo

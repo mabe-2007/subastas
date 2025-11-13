@@ -29,18 +29,29 @@
         $('#correo').val("");
         $('#clave').val("");
 
+        // ✅ INICIO DE SESIÓN SEGURO
         $("#btningresar").on("click", function() {
-          $.post("include/ctrlindex.php",{ 
-            action:'iniciar', 
-            clave:$('#claveinicio').val(),
-            correo:$('#correoinicio').val()
-          }, function(data){
-            if(data.rspst == "1"){   
-              location.href="archivos/vista/inicio.php";
-            }else{  
-              $("#msj").html(data.msj); 
+            var correo = $("#correoinicio").val().trim();
+            var clave = $("#claveinicio").val();
+            
+            if(correo === '' || clave === '') {
+                $("#msj").html("Por favor complete todos los campos");
+                return;
             }
-          }, 'json');
+            
+            $.post("include/ctrlindex.php", { 
+                action: 'iniciar', 
+                clave: clave,
+                correo: correo
+            }, function(data){
+                if(data.rspst == "1"){   
+                    location.href = "archivos/vista/inicio.php";
+                } else {  
+                    $("#msj").html(data.msj); 
+                }
+            }, 'json').fail(function() {
+                $("#msj").html("Error de conexión");
+            });
         });
 
          // Verificar si el usuario ya se registró
