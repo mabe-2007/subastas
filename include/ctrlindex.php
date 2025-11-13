@@ -2,7 +2,7 @@
 include '../herramientas/llave/llave.php';
 include 'emailregistro.php';
 require_once('config.php');
-include 'conex.php'; // ✅ Incluir la nueva conexión segura
+include_once 'conex.php'; // ✅ Incluir la nueva conexión segura
 
 header('Content-Type: application/json; charset='.$charset);
 header('Cache-Control: no-cache, must-revalidate');
