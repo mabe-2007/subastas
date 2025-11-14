@@ -3,3 +3,4 @@
 return [
     'email_password' => 'fach imiv bgez hutb'
 ];
+?>
