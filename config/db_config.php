@@ -1,6 +1,6 @@
 <?php
-// /var/www/config/db_config.php - Configuración segura de BD
+// config/db_config.php
 return [
-    'db_password' => 'root' // Tu contraseña real de MySQL aquí
+    'db_password' => 'root'  // ← Esta debe ser tu contraseña REAL de MySQL
 ];
 ?>
