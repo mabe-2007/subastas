@@ -1,33 +1,35 @@
 <?php
-// llave.php - Usar función centralizada (VERSIÓN CORREGIDA)
+// llave.php - Versión corregida y funcional
 
-// ✅ CORREGIDO: Usar require_once para incluir archivos, no 'use'
+// ✅ DEFINIR CONSTANTE PARA EL EMAIL (como sugiere el analizador)
+define('EMAIL_DEFAULT', 'astridmabesoy@gmail.com');
+
+// ✅ CORREGIDO: Incluir config_env.php de forma segura
 if (file_exists(__DIR__ . '/../../include/config_env.php')) {
     require_once __DIR__ . '/../../include/config_env.php';
     
-    // Configuración usando getEnvVar si está disponible
+    // ✅ CORREGIDO: Usar getEnvVar (no getEnWar)
     if (function_exists('getEnvVar')) {
         $session_name = getEnvVar('SESSION_NAME', "Sessionsubastas");
-        $email_remitente = getEnvVar('EMAIL_REMITENTE', "astridmabesoy@gmail.com");
+        $email_remitente = getEnvVar('EMAIL_REMITENTE', EMAIL_DEFAULT);
         $password = getEnvVar('EMAIL_PASSWORD', '');
     } else {
         // Fallback si la función no existe
         $session_name = "Sessionsubastas";
-        $email_remitente = "astridmabesoy@gmail.com";
+        $email_remitente = EMAIL_DEFAULT;
         $password = 'fach imiv bgez hutb';
     }
 } else {
     // Si config_env.php no existe, usar valores directos
     $session_name = "Sessionsubastas";
-    $email_remitente = "astridmabesoy@gmail.com";
+    $email_remitente = EMAIL_DEFAULT;
     $password = 'fach imiv bgez hutb';
 }
 
-// ✅ CORREGIDO: Si no hay variable de entorno, usa un archivo de configuración externo
+// ✅ CORREGIDO: Si no hay contraseña, usar archivo de configuración externo
 if (empty($password)) {
     $config_file = __DIR__ . '/../../config/email_config.php';
     if (file_exists($config_file)) {
-        // ✅ CORREGIDO: Usar include, no 'use'
         $config = include $config_file;
         $password = isset($config['email_password']) ? $config['email_password'] : '';
     }
