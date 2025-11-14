@@ -34,7 +34,7 @@ function loadEnvironmentVariables($filePath = "../env") {
     return true;
 }
 
-// ✅ EVITAR REDECLARACIÓN
+// EVITAR REDECLARACIÓN
 if (!function_exists('getEnvVar')) {
     function getEnvVar($key, $default = '') {
         // Prioridad: $_ENV > getenv() > default

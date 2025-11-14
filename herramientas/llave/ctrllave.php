@@ -7,9 +7,9 @@ $email_destinatario = $_POST['correoinicio'];
 $jTableResult = array();
 $jTableResult['msjValidez'] = "";	
 
-// ✅ VALIDACIÓN MEJORADA
+//VALIDACIÓN 
 if (filter_var($email_destinatario, FILTER_VALIDATE_EMAIL)) {
-    // ✅ CONSULTA PREPARADA PARA EVITAR SQL INJECTION
+    //CONSULTA PARA EVITAR SQL INJECTION
     $sql = "SELECT usuario.correo FROM usuario WHERE correo = ?";
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, "s", $email_destinatario);
@@ -26,7 +26,7 @@ if (filter_var($email_destinatario, FILTER_VALIDATE_EMAIL)) {
 
         $resul = enviarCorreo($email_remitente, $email_destinatario, $password, $clave);
         
-        if($resul === true){ // ✅ CORREGIDO: comparación estricta
+        if($resul === true){ //comparación estricta
             $jTableResult['rspst'] = 1;
             $jTableResult['msjValidez'] = "Se envió un correo de recuperación";
             

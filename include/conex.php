@@ -1,14 +1,14 @@
 <?php
 // conex.php - Versión final y limpia
 
-// ✅ INCLUIR CONFIG_ENV PRIMERO
-$config_env_path = __DIR__ . '/config_env.php';
+// INCLUIR CONFIG_ENV PRIMERO 
+$config_env_path = __DIR__ . '/config_env.php'; // 
 if (file_exists($config_env_path)) {
     require_once $config_env_path;
 }
 
 function Conectarse() {
-    // ✅ CARGAR VARIABLES DE FORMA SEGURA
+    // CARGAR VARIABLES DE FORMA SEGURA
     if (function_exists('getEnvVar')) {
         $servername = getEnvVar('DB_HOST', 'localhost');
         $db = getEnvVar('DB_NAME', 'subastas');
@@ -16,7 +16,7 @@ function Conectarse() {
         $password = getEnvVar('DB_PASS', '');
         $charset = getEnvVar('DB_CHARSET', 'utf8mb4');
     } else {
-        // ✅ SIN CONTRASEÑAS EN CÓDIGO
+        // se deja sin contraseña
         $servername = 'localhost';
         $db = 'subastas';
         $username = 'root';
@@ -24,7 +24,7 @@ function Conectarse() {
         $charset = 'utf8mb4';
     }
     
-    // ✅ CARGAR CONTRASEÑA DESDE ARCHIVO EXTERNO
+    // SE CARGAR CONTRASEÑA DESDE ARCHIVO EXTERNO
     if (empty($password)) {
         $config_file = __DIR__ . '/../config/db_config.php';
         if (file_exists($config_file)) {
@@ -33,14 +33,14 @@ function Conectarse() {
         }
     }
     
-    // ✅ CONEXIÓN SEGURA
+    // CONEXIÓN SEGURA
     $conectar = mysqli_connect($servername, $username, $password, $db);
     
     if (!$conectar) {
         $error = mysqli_connect_error();
         error_log("Error de conexión MySQL: " . $error);
         
-        // ✅ MENSAJES DE ERROR SEGUROS
+        //MENSAJES DE ERROR SEGUROS
         if (strpos($error, '1045') !== false) { // Access denied
             die("Error de autenticación MySQL: Verifica las credenciales en config/db_config.php");
         } elseif (strpos($error, '1049') !== false) { // Unknown database
@@ -54,7 +54,6 @@ function Conectarse() {
     }
 }
 
-// Resto de funciones...
 function ejecutarConsultaSegura($sql, $tipos = "", $parametros = []) {
     $conn = Conectarse();
     $stmt = mysqli_prepare($conn, $sql);

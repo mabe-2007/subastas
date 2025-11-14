@@ -9,7 +9,7 @@ header('Cache-Control: no-cache, must-revalidate');
 session_name($session_name);
 session_start();
 
-// ✅ FUNCIÓN PARA VALIDAR Y LIMPIAR DATOS (COMPATIBLE CON PHP 5.x)
+// FUNCIÓN PARA VALIDAR Y LIMPIAR DATOS (COMPATIBLE CON PHP 5.x)
 function limpiarDatos($dato) {
     $dato = trim($dato);
     $dato = stripslashes($dato);
@@ -25,7 +25,7 @@ switch ($_REQUEST['action']) {
         $jTableResult['rspst'] = "";
         $jTableResult['optionTipoDocumento'] = "";
         
-        // ✅ CONSULTA SEGURA
+        //Se realizaconsulta segura
         $query = "SELECT idTipoDocumento, nombreTipoDocumento FROM tipodocumento";					
         $reg = mysqli_query($conEctar, $query);					
         while($registro = mysqli_fetch_array($reg)) {			
@@ -40,7 +40,7 @@ switch ($_REQUEST['action']) {
         $jTableResult['rspst'] = 1;
         $jTableResult['optiondepto'] = "";
         
-        // ✅ CONSULTA SEGURA
+        //consulta segura
         $query = "SELECT iddepartamento, departamento FROM departamentos";					
         $reg = mysqli_query($conEctar, $query);		
         
@@ -56,7 +56,7 @@ switch ($_REQUEST['action']) {
         $jTableResult['msj'] = "";
         $jTableResult['rspst'] = "";
         
-        // ✅ VALIDACIÓN Y LIMPIEZA DE DATOS (COMPATIBLE)
+        //VALIDACIÓN Y LIMPIEZA DE DATOS 
         $correo = isset($_POST['correo']) ? limpiarDatos($_POST['correo']) : '';
         $clave = isset($_POST['clave']) ? $_POST['clave'] : '';
         
@@ -64,7 +64,7 @@ switch ($_REQUEST['action']) {
         $claveinicio = strlen($clave);
         
         if($correoinicio > 0 and $claveinicio > 0) {
-            // ✅ CONSULTA PREPARADA - SEGURA CONTRA INYECCIÓN SQL
+            // CONSULTA PREPARADA - SEGURA CONTRA INYECCIÓN SQL
             $query = "SELECT usuario.idusuario, usuario.correo, usuario.nombre,
                       usuario.apellidos, usuario.clave, usuario.idrol
                     FROM usuario
@@ -79,7 +79,7 @@ switch ($_REQUEST['action']) {
             if($numero > 0) { 
                 $usuario = mysqli_fetch_assoc($result);
                 
-                // ✅ VERIFICAR CONTRASEÑA (compatible con texto plano temporalmente)
+                //VERIFICAR CONTRASEÑA (compatible con texto plano temporalmente)
                 if ($usuario['clave'] === $clave) {
                 // Cuando implementes hash, usar:
                 // if (password_verify($clave, $usuario['clave'])) {
@@ -90,7 +90,7 @@ switch ($_REQUEST['action']) {
                     $_SESSION['idrol'] = $usuario['idrol'];
                     $_SESSION['usuarioLogueado'] = $usuario['nombre']." ".$usuario['apellidos'];
                     
-                    // ✅ REGENERAR ID DE SESIÓN POR SEGURIDAD
+                    // REGENERAR ID DE SESIÓN POR SEGURIDAD
                     if (function_exists('session_regenerate_id')) {
                         session_regenerate_id(true);
                     }
@@ -116,7 +116,7 @@ switch ($_REQUEST['action']) {
         $jTableResult['msj'] = "";
         $jTableResult['rspst'] = "";
         
-        // ✅ VALIDAR Y LIMPIAR TODOS LOS DATOS (COMPATIBLE)
+        // VALIDAR Y LIMPIAR TODOS LOS DATOS 
         $correo = isset($_POST['correoregistro']) ? limpiarDatos($_POST['correoregistro']) : '';
         $nombre = isset($_POST['nombre']) ? limpiarDatos($_POST['nombre']) : '';
         $apellido = isset($_POST['apellido']) ? limpiarDatos($_POST['apellido']) : '';
@@ -127,7 +127,7 @@ switch ($_REQUEST['action']) {
         $iddepto = isset($_POST['iddepto']) ? intval($_POST['iddepto']) : 0;
         $claveregistro = isset($_POST['claveregistro']) ? $_POST['claveregistro'] : '';
         
-        // ✅ VALIDACIONES BÁSICAS
+        // VALIDACIONES BÁSICAS
         if (empty($correo) || empty($nombre) || empty($claveregistro)) {
             $jTableResult['rspst'] = "0";
             $jTableResult['msj'] = "DATOS INCOMPLETOS";
@@ -142,7 +142,7 @@ switch ($_REQUEST['action']) {
             break;
         }
         
-        // ✅ VERIFICAR SI EL CORREO YA EXISTE (CONSULTA PREPARADA)
+        // VERIFICAR SI EL CORREO YA EXISTE 
         $query = "SELECT usuario.idusuario FROM usuario WHERE usuario.correo = ?";	
         $stmt = mysqli_prepare($conEctar, $query);
         mysqli_stmt_bind_param($stmt, "s", $correo);
@@ -155,7 +155,7 @@ switch ($_REQUEST['action']) {
             $jTableResult['rspst'] = "0";    
             $jTableResult['msj'] = "EL CORREO YA ESTÁ REGISTRADO"; 
         } else {	
-            // ✅ HASH DE CONTRASEÑA SEGURO (si tu PHP lo soporta)
+            // HASH DE CONTRASEÑA SEGURO 
             if (function_exists('password_hash')) {
                 $clave_hash = password_hash($claveregistro, PASSWORD_DEFAULT);
             } else {
@@ -166,7 +166,7 @@ switch ($_REQUEST['action']) {
             // Asignamos automáticamente idrol = 1 (usuario normal)
             $idrol = 1;
             
-            // ✅ INSERT SEGURO CON CONSULTA PREPARADA
+            // INSERT SEGURO CON CONSULTA PREPARADA
             $query = "INSERT INTO usuario (idusuario, idrol, nombre, apellidos, 
                       direccion, idTipoDocumento, identificacion, telefono, correo, clave, iddepartamento) 
                       VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -206,7 +206,7 @@ switch ($_REQUEST['action']) {
         $jTableResult = array();
         $jTableResult['rspst'] = "";
         
-        // ✅ DESTRUIR SESIÓN DE FORMA SEGURA
+        // DESTRUIR SESIÓN 
         $_SESSION = array();
         
         if (ini_get("session.use_cookies")) {
