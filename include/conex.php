@@ -1,44 +1,50 @@
 <?php
-// conex.php - Versión corregida
+// conex.php - Versión corregida y funcional
 
-// ✅ CORREGIDO: Incluir config_env.php de forma segura
+// ✅ INCLUIR CONFIG_ENV PRIMERO
 $config_env_path = __DIR__ . '/config_env.php';
 if (file_exists($config_env_path)) {
     require_once $config_env_path;
 } else {
-    die("Error: No se encuentra config_env.php");
+    error_log("Config env no encontrado");
 }
 
 function Conectarse() {
-    // ✅ USAR FUNCIÓN DE config_env.php (si existe)
+    // ✅ CARGAR VARIABLES CON VALORES POR DEFECTO SEGUROS
     if (function_exists('getEnvVar')) {
         $servername = getEnvVar('DB_HOST', 'localhost');
         $db = getEnvVar('DB_NAME', 'subastas');
         $username = getEnvVar('DB_USER', 'root');
-        $password = getEnvVar('DB_PASS', 'root');
+        $password = getEnvVar('DB_PASS', 'root'); // ✅ PASSWORD POR DEFECTO
         $charset = getEnvVar('DB_CHARSET', 'utf8mb4');
     } else {
-        // ✅ VALORES POR DEFECTO SI LA FUNCIÓN NO EXISTE
+        // ✅ VALORES TEMPORALES PARA PRUEBAS
         $servername = 'localhost';
         $db = 'subastas';
         $username = 'root';
-        $password = 'root';
+        $password = 'root'; // ← Tu contraseña de MySQL
         $charset = 'utf8mb4';
     }
     
-    // ✅ CONEXIÓN
+    // ✅ CONEXIÓN DIRECTA
     $conectar = mysqli_connect($servername, $username, $password, $db);
     
     if (!$conectar) {
         $error = mysqli_connect_error();
-        error_log("Error de conexión MySQL: " . $error);
+        error_log("Error MySQL: " . $error);
         
-        if (strpos($error, 'Unknown database') !== false) {
-            die("Error: La base de datos '$db' no existe. Crea la base de datos 'subastas' primero.");
-        } elseif (strpos($error, 'Access denied') !== false) {
-            die("Error: Acceso denegado. Verifica usuario/contraseña de MySQL.");
+        // Mensajes de error específicos
+        if (strpos($error, '1045') !== false) { // Access denied
+            // ✅ SOLUCIÓN TEMPORAL: Intentar sin contraseña (común en XAMPP/WAMP)
+            $conectar = mysqli_connect($servername, $username, '', $db);
+            if ($conectar) {
+                return $conectar;
+            }
+            die("Error de acceso: Verifica usuario/contraseña de MySQL");
+        } elseif (strpos($error, '1049') !== false) { // Unknown database
+            die("Error: La base de datos '$db' no existe.");
         } else {
-            die("Error de conexión MySQL: " . $error);
+            die("Error de conexión: " . $error);
         }
     } else {
         mysqli_set_charset($conectar, $charset);
@@ -46,13 +52,13 @@ function Conectarse() {
     }
 }
 
-// Resto de funciones...
+// Resto de funciones permanecen igual...
 function ejecutarConsultaSegura($sql, $tipos = "", $parametros = []) {
     $conn = Conectarse();
     $stmt = mysqli_prepare($conn, $sql);
     
     if (!$stmt) {
-        error_log("Error preparando consulta: " . mysqli_error($conn));
+        error_log("Error en consulta: " . mysqli_error($conn));
         mysqli_close($conn);
         return false;
     }
@@ -67,7 +73,7 @@ function ejecutarConsultaSegura($sql, $tipos = "", $parametros = []) {
         mysqli_close($conn);
         return $result;
     } else {
-        error_log("Error ejecutando consulta: " . mysqli_stmt_error($stmt));
+        error_log("Error ejecutando: " . mysqli_stmt_error($stmt));
         mysqli_stmt_close($stmt);
         mysqli_close($conn);
         return false;
