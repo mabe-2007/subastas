@@ -28,7 +28,7 @@ function Conectarse() {
     if (empty($password)) {
         $config_file = __DIR__ . '/../config/db_config.php';
         if (file_exists($config_file)) {
-            $config = include $config_file;
+            $config = include_once $config_file;
             $password = $config['db_password'];
         }
     }

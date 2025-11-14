@@ -30,7 +30,7 @@ if (file_exists(__DIR__ . '/../../include/config_env.php')) {
 if (empty($password)) {
     $config_file = __DIR__ . '/../../../config/email_config.php'; // Fuera del directorio web
     if (file_exists($config_file)) {
-        $config = include $config_file;
+        $config = include_once $config_file;
         $password = $config['email_password'];
     }
 }
