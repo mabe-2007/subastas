@@ -1,40 +1,68 @@
 <?php
-// llave.php - Usar función centralizada (VERSIÓN CORREGIDA)
+// conex.php - Versión definitiva SIN getEnvVar
 
-// ✅ CORREGIDO: Usar require_once para incluir archivos, no 'use'
-if (file_exists(__DIR__ . '/../../include/config_env.php')) {
-    require_once __DIR__ . '/../../include/config_env.php';
+// Incluir configurador de variables de entorno
+use 'config_env.php';
+
+function Conectarse() {
+    // ✅ USAR FUNCIÓN DE config_env.php
+    $servername = getEnvVar('DB_HOST', 'localhost');
+    $db = getEnvVar('DB_NAME', 'subastas');
+    $username = getEnvVar('DB_USER', 'root');
+    $password = getEnvVar('DB_PASS', 'root');
     
-    // Configuración usando getEnvVar si está disponible
-    if (function_exists('getEnvVar')) {
-        $session_name = getEnvVar('SESSION_NAME', "Sessionsubastas");
-        $email_remitente = getEnvVar('EMAIL_REMITENTE', "astridmabesoy@gmail.com");
-        $password = getEnvVar('EMAIL_PASSWORD', '');
+    // ✅ CONEXIÓN
+    $conectar = mysqli_connect($servername, $username, $password, $db);
+    
+    if (!$conectar) {
+        $error = mysqli_connect_error();
+        error_log("Error de conexión MySQL: " . $error);
+        
+        if (strpos($error, 'Unknown database') !== false) {
+            die("Error: La base de datos '$db' no existe. Crea la base de datos 'subastas' primero.");
+        } elseif (strpos($error, 'Access denied') !== false) {
+            die("Error: Acceso denegado. Verifica usuario/contraseña de MySQL.");
+        } else {
+            die("Error de conexión MySQL: " . $error);
+        }
     } else {
-        // Fallback si la función no existe
-        $session_name = "Sessionsubastas";
-        $email_remitente = "astridmabesoy@gmail.com";
-        $password = 'fach imiv bgez hutb';
-    }
-} else {
-    // Si config_env.php no existe, usar valores directos
-    $session_name = "Sessionsubastas";
-    $email_remitente = "astridmabesoy@gmail.com";
-    $password = 'fach imiv bgez hutb';
-}
-
-// ✅ CORREGIDO: Si no hay variable de entorno, usa un archivo de configuración externo
-if (empty($password)) {
-    $config_file = __DIR__ . '/../../config/email_config.php';
-    if (file_exists($config_file)) {
-        // ✅ CORREGIDO: Usar include, no 'use'
-        $config = include $config_file;
-        $password = isset($config['email_password']) ? $config['email_password'] : '';
+        $charset = getEnvVar('DB_CHARSET', 'utf8mb4');
+        mysqli_set_charset($conectar, $charset);
+        return $conectar;
     }
 }
 
-// ✅ Asegurar que siempre tengamos valores
-if (empty($password)) {
-    $password = 'fach imiv bgez hutb'; // Tu contraseña de aplicación
+// Resto de funciones (sin getEnvVar)
+function ejecutarConsultaSegura($sql, $tipos = "", $parametros = []) {
+    $conn = Conectarse();
+    $stmt = mysqli_prepare($conn, $sql);
+    
+    if (!$stmt) {
+        error_log("Error preparando consulta: " . mysqli_error($conn));
+        mysqli_close($conn);
+        return false;
+    }
+    
+    if (!empty($tipos) && !empty($parametros)) {
+        mysqli_stmt_bind_param($stmt, $tipos, ...$parametros);
+    }
+    
+    if (mysqli_stmt_execute($stmt)) {
+        $result = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
+        mysqli_close($conn);
+        return $result;
+    } else {
+        error_log("Error ejecutando consulta: " . mysqli_stmt_error($stmt));
+        mysqli_stmt_close($stmt);
+        mysqli_close($conn);
+        return false;
+    }
+}
+
+function cerrarConexion($conexion) {
+    if ($conexion) {
+        mysqli_close($conexion);
+    }
 }
 ?>
