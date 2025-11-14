@@ -1,15 +1,30 @@
 <?php
-// conex.php - Versión definitiva SIN getEnvVar
+// conex.php - Versión corregida
 
-// Incluir configurador de variables de entorno
-use 'config_env.php';
+// ✅ CORREGIDO: Incluir config_env.php de forma segura
+$config_env_path = __DIR__ . '/config_env.php';
+if (file_exists($config_env_path)) {
+    require_once $config_env_path;
+} else {
+    die("Error: No se encuentra config_env.php");
+}
 
 function Conectarse() {
-    // ✅ USAR FUNCIÓN DE config_env.php
-    $servername = getEnvVar('DB_HOST', 'localhost');
-    $db = getEnvVar('DB_NAME', 'subastas');
-    $username = getEnvVar('DB_USER', 'root');
-    $password = getEnvVar('DB_PASS', 'root');
+    // ✅ USAR FUNCIÓN DE config_env.php (si existe)
+    if (function_exists('getEnvVar')) {
+        $servername = getEnvVar('DB_HOST', 'localhost');
+        $db = getEnvVar('DB_NAME', 'subastas');
+        $username = getEnvVar('DB_USER', 'root');
+        $password = getEnvVar('DB_PASS', 'root');
+        $charset = getEnvVar('DB_CHARSET', 'utf8mb4');
+    } else {
+        // ✅ VALORES POR DEFECTO SI LA FUNCIÓN NO EXISTE
+        $servername = 'localhost';
+        $db = 'subastas';
+        $username = 'root';
+        $password = 'root';
+        $charset = 'utf8mb4';
+    }
     
     // ✅ CONEXIÓN
     $conectar = mysqli_connect($servername, $username, $password, $db);
@@ -26,13 +41,12 @@ function Conectarse() {
             die("Error de conexión MySQL: " . $error);
         }
     } else {
-        $charset = getEnvVar('DB_CHARSET', 'utf8mb4');
         mysqli_set_charset($conectar, $charset);
         return $conectar;
     }
 }
 
-// Resto de funciones (sin getEnvVar)
+// Resto de funciones...
 function ejecutarConsultaSegura($sql, $tipos = "", $parametros = []) {
     $conn = Conectarse();
     $stmt = mysqli_prepare($conn, $sql);
